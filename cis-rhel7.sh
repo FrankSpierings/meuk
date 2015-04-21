@@ -85,6 +85,8 @@ echo
 
 echo '1.2.2 Verify Red Hat GPG Key is Installed (Scored)'
 rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey
+echo
+
 echo '1.2.2 Verify Red Hat GPG Key is Installed (Scored) (ALTERNATIVE)'
 rpm -qa gpg-pubkey* | xargs rpm -qi
 echo 
@@ -128,6 +130,8 @@ echo
 
 echo '1.4.6 Check for Unconfined Daemons (Scored)'
 ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" | tr ':' ' ' | awk '{print $NF}'
+echo
+
 echo '1.4.6 Check for Unconfined Daemons (Scored) (ALTERNATIVE)'
 ps -eo label,cmd | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk" 
 echo 
@@ -305,6 +309,10 @@ echo '4.2.8 Enable TCP SYN Cookies (Scored)'
 /sbin/sysctl net.ipv4.tcp_syncookies
 echo 
 
+echo '4.5.3 Verify Permissions on /etc/hosts.allow (Scored)'
+ls -l /etc/hosts.allow
+echo
+
 echo '4.5.5 Verify Permissions on /etc/hosts.deny (Scored)'
 ls -l /etc/hosts.deny
 echo 
@@ -424,7 +432,7 @@ grep delete /etc/audit/audit.rules
 echo 
 
 echo '5.2.14 Collect File Deletion Events by User (Scored) (ALTERNATIVE)'
-grep delete /etc/audit/*
+grep -Hir delete /etc/audit/*
 echo 
 
 echo '5.2.15 Collect Changes to System Administration Scope (sudoers) (Scored)'
@@ -448,7 +456,7 @@ grep modules /etc/audit/audit.rules
 echo 
 
 echo '5.2.17 Collect Kernel Module Loading and Unloading (Scored) (ALTERNATIVE)'
-grep -Hir /etc/audit/*
+grep -Hir modules /etc/audit/*
 echo 
 
 echo '5.2.18 Make the Audit Configuration Immutable (Scored)'
@@ -456,7 +464,7 @@ grep "^-e 2" /etc/audit/audit.rules
 echo 
 
 echo '5.2.18 Make the Audit Configuration Immutable (Scored) (ALTERNATIVE)'
-grep "^-e 2" /etc/audit/*
+grep -Hir "^-e 2" /etc/audit/*
 echo 
 
 echo '6.1.1 Enable anacron Daemon (Scored)'
@@ -580,7 +588,7 @@ grep "PermitUserEnvironment" /etc/ssh/sshd_config
 echo 
 
 echo '6.2.10 Do Not Allow Users to Set Environment Options (Scored) (ALTERNATIVE)'
-sshd -T | grep "PermitUserEnvironment"
+sshd -T | grep -i "PermitUserEnvironment"
 echo 
 
 echo '6.2.11 Use Only Approved Cipher in Counter Mode (Scored)'
